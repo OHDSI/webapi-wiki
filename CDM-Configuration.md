@@ -70,7 +70,7 @@ INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, tabl
 
 The above inserts creates a source with `source_id = 1` with 4 daimon entries, one for each daimon type (0 = CDM, 1 = Vocabulary, 2 = Results, 5 = TEMP). If you'd like to configure more than 1 source for use in WebAPI, repeat the steps above and increment the `source_id` used to distinguish the sources from one another.
 
-👉 _Note: WebAPI will need to be restarted in order to see the the new sources._
+👉 _Note: To see the new sources, open a browser and navigate to `<server>:port/WebAPI/sources/refresh`_
 
 ## Verify Configuration
 Once WebAPI is started, and the source/source_daimon inserts are complete, you should be able to open a browser to the following URL:
