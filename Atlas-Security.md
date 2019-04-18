@@ -36,7 +36,7 @@ In the example above, the `configLocal.userAuthenticationEnabled` setting is upd
 For those that followed the [[Basic Security Configuration]], the settings above will work. For those using OAuth/AD, please use the relevant configuration for your setup.
 
 ## Defining an Administrator
-You should now be able to load ATLAS and find that you can login to the environment using the authentication provider configured in the previous step.  However, you will have limited permissions.  The following query will list the current permissions that your login has in the database:
+You should now be able to load ATLAS and find that you can login to the environment using the authentication provider configured in the previous step.  However, you will have limited permissions.  The following query will list the current permissions that all users have in the database:
 
 ```sql
 select sec_user.id as user_id, login, sec_role.id as role_id, sec_role.name as role_name
@@ -44,12 +44,13 @@ from sec_user
 join sec_user_role on sec_user.id = sec_user_role.user_id
 join sec_role on sec_user_role.role_id = sec_role.id
 ```
-
-To grant yourself administrator privileges you can run the following query:
+To grant yourself administrator privileges, find your login and the corresponding `user_id`, and then run the following query:
 
 ```sql
 insert into sec_user_role (user_id, role_id) values (1000,2)
 ```
+
+**NOTE:** Substitute your `user_id` for `1000` in the query above.
 
 Now by logging out and logging back in to ATLAS you should be granted administrative rights across the system.  You will then be able to manage other permissions from the `Manage permissions` section found in the configuration tab.
 
@@ -61,13 +62,13 @@ Note that `Manage Permissions` button is only available for members of the `admi
 
 <img src="images/atlas/roles.png">
 
-You may click on certain role to edit it or press ‘New Role’ button to create new role. 
+You may click on certain role to edit it or press `New Role` button to create new role. 
 
-Now you're on 'Role' page. Select users which are participated in the role on ‘Users’ tab.
+Now you're on `Role` page. Select users which are participated in the role on `Users` tab.
 
 <img src="images/atlas/role-users.png">
 
-To define permissions for role members, go to ‘Permissions’ tab.
+To define permissions for role members, go to `Permissions` tab.
 
 <img src="images/atlas/role-permissions.png">
 
