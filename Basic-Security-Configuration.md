@@ -12,6 +12,9 @@ The settings.xml file is used to configure your build of the OHDSI WebAPI in you
 ```xml
 <security.provider>AtlasRegularSecurity</security.provider>
 <security.origin>*</security.origin>
+<security.maxLoginAttempts>3</security.maxLoginAttempts>
+<security.duration.initial>10</security.duration.initial>
+<security.duration.increment>10</security.duration.increment>
 <security.db.datasource.url>jdbc:postgresql://localhost:5432/ohdsi</security.db.datasource.url>
 <security.db.datasource.driverClassName>org.postgresql.Driver</security.db.datasource.driverClassName>
 <security.db.datasource.schema>ohdsi</security.db.datasource.schema>
@@ -19,6 +22,14 @@ The settings.xml file is used to configure your build of the OHDSI WebAPI in you
 <security.db.datasource.password>ohdsi</security.db.datasource.password>
 <security.db.datasource.authenticationQuery>select password from ${security.db.datasource.schema}.demo_security where email = ?</security.db.datasource.authenticationQuery>
 ```
+
+## security.maxLoginAttempts
+
+This is the maximum number of login attempts allowed before the account is locked out of the system.
+
+## security.duration
+
+This represents the `initial` length of lockout and the `incremental` length of lockout in seconds. So, if there are more than `security.maxLoginAttempts`, the initial lockout time will start and for every subsequent failed login, the incremental value will be added to the total lockout time.
 
 ## database 
 Once you have completed the configuration of the profile for your OHDSI WebAPI you will need to create the table that will contain our sample login information.  The script to create a minimal sample table in a postgresql environment is as follows:
