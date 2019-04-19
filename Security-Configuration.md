@@ -29,9 +29,6 @@ The `<security>` settings are controlled via the settings.xml.  The relevant sec
 - **security.ssl.enabled**: Set to true to enable SSL for encrypting connections to the REST endpoints. Check the [[SSL Configuration In Tomcat]] guide for more information on how to set up a server to use SSL.
 - **server.ssl.key-store, server.ssl.key-store-password**: Specify the location of the `server.ssl.key-store` and `server.ssl.key-store-password` for use with the [[SSL Configuration In Tomcat]].
 - **security.cors.enabled**: Set to true to enable Cross-Origin Resource Sharing [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-- **security.maxLoginAttempts**: Maximum number of login attempts before a lockout period is initiated.
-- **security.duration.initial**: The `initial` length of lockout if there are more than `security.maxLoginAttempts` failed login attempts
-- **security.duration.increment**:  The `incremental` lockout time will be added to the total lockout time for each subsequent login attempt.
 
 Once `AtlasRegularSecurity` is enabled, you will be able to utilize the authentication mechanisms detailed below.
 
