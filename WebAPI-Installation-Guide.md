@@ -3,14 +3,14 @@
 # Overview
 This page describes the database setup, maven build configuration and deployment of OHDSI/WebAPI to a Apache Tomcat environment. This application is Java-based, packaged as a WAR, and should be able to be deployed into any Java servlet container.
 
-This guide is intended to provide a basic setup guide on a Windows operating system. **This guide is not intended for setting up production systems**. There are other efforts in the OHDSI Community that are focused on providing more enterprise-ready setups for the OHDSI Tools. These include the Broadsea project: https://github.com/OHDSI/Broadsea and OHDSI on AWS: https://github.com/OHDSI/OHDSIonAWS. 
+This guide is intended to provide a basic setup guide on a Windows operating system. **This guide is not intended for setting up production systems**. There are other efforts in the OHDSI Community that are focused on providing more enterprise-ready setups for the OHDSI Tools. These include the Broadsea project: https://github.com/OHDSI/Broadsea and OHDSI on AWS: https://github.com/OHDSI/OHDSIonAWS.
 
 # Software
 
 You will need the following software as part of this setup guide:
 
 - **Text Editor**: Notepad++ or your favorite editor for editing configuration files
-  
+
 - **[Java 8 Java Development Kit (JDK)](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)**: Install this to the default location on your computer and note the location. Ensure that the `JAVA_HOME` environmental variable is set for Windows by using the following command from a command prompt:
 
 ```
@@ -21,14 +21,14 @@ set JAVA_HOME=C:/Program Files/Java/jdk1.8.0_201
 👉**R Users**: _The `JAVA_HOME` environmental variable can cause problems when attempting to use OHDSI R libraries. You may want to remove this after you are done building WebAPI_
 
 
-- **[Git](https://git-scm.com/downloads)**: Install this on your computer in order to clone the project repository. 
-  
+- **[Git](https://git-scm.com/downloads)**: Install this on your computer in order to clone the project repository.
+
 - **[Apache Maven](https://maven.apache.org/download.cgi)** - Install maven to build the Java project for installation into your Java servlet container. Note the location of the installation (for this guide we'll use `C:\maven`.) Refer to the [Maven on Windows](https://maven.apache.org/guides/getting-started/windows-prerequisites.html) guide to set your `MAVEN_HOME` environment variable to add the location where you installed Maven (`C:\maven`) and add `C:\maven\bin` to the PATH environment variable.
 
 - **[Apache Tomcat 8](https://tomcat.apache.org/download-80.cgi)**: Its a good idea to make sure the version of Tomcat matches your Java version. Download the version appropriate for your operating system. Extract it to your computer and note the location (`C:\tomcat`).
-  
+
 - **Database Query Tool**: Use your favorite database query tool (such as [SQL Workbench/J](https://www.sql-workbench.eu/)). This will be used to verify the database setup.
-  
+
 - **Database platform for WebAPI Database**: WebAPI requires a database on any one of these platforms:
     - MS SQL 2012
     - PostrgeSQL 10
@@ -45,7 +45,7 @@ If you already have a database server you plan to use, please refer to the insta
 ## Install And Configure the Database Platform
 Follow the setup guide for your database platform:
 - [PostgreSQL 10](https://github.com/OHDSI/WebAPI/wiki/PostgreSQL-Installation-Guide)
-- [SQL Server 2012](https://github.com/OHDSI/WebAPI/wiki/SQL-Server-Setup-Guide) 
+- [SQL Server 2012](https://github.com/OHDSI/WebAPI/wiki/SQL-Server-Setup-Guide)
 - [Oracle 11g XE](https://github.com/OHDSI/WebAPI/wiki/Oracle-DB-Setup-Guide)
 
 ✅ Note the **database name, user names and passwords** created as part of this process as they are required for the WebAPI setup.
@@ -54,8 +54,8 @@ Follow the setup guide for your database platform:
 
 It is critical to ensure that you have proper database connectivity before attempting to install WebAPI. Here are some high-level steps to follow **on the machine that will run WebAPI**:
 
-- Use the database query tool to connect to the database server. 
-- Log into the database using the application user name and password - if you followed the guides above, this will be the `ohdsi` database and the `ohdsi_app_user`. 
+- Use the database query tool to connect to the database server.
+- Log into the database using the application user name and password - if you followed the guides above, this will be the `ohdsi` database and the `ohdsi_app_user`.
 
 Once you have ensure that the connection works, your ready to configure, build and run WebAPI.
 
@@ -64,23 +64,23 @@ Once you have ensure that the connection works, your ready to configure, build a
 
 ## Clone the WebAPI project
 
-Create a folder (for example `C:\Git\OHDSI`) and navigate to it. From within your project directory, clone the project using `git`: 
+Create a folder (for example `C:\Git\OHDSI`) and navigate to it. From within your project directory, clone the project using `git`:
 
 ```
 C:\Git\OHDSI> git clone https://github.com/OHDSI/WebAPI.git
 ```
 
 ### Create settings.xml file
-In the root of the WebAPI project folder, there is a file named `sample_settings.xml` which 3 `<profile>` blocks for the 3 WebAPI database platforms. Copy this file into a new folder `WebAPIConfig` and rename it to `settings.xml`. **Note**: `WebAPIConfig` will be subfolder off of the root `WebAPI` folder. 
+In the root of the WebAPI project folder, there is a file named `sample_settings.xml` which 3 `<profile>` blocks for the 3 WebAPI database platforms. Copy this file into a new folder `WebAPIConfig` and rename it to `settings.xml`. **Note**: `WebAPIConfig` will be subfolder off of the root `WebAPI` folder.
 
 ## Configure & Build WebAPI
 
 ### Configure the Maven profile
 
-Next we need to configure the maven profile in `WebAPIConfig\settings.xml` to match the your environment setup. Open the `settings.xml`, find the profile cooresponding to your database setup and then make the adjustments for your environment. Here are some important settings to review:
+Next we need to configure the maven profile in `WebAPIConfig\settings.xml` to match the your environment setup. Open the `settings.xml`, find the profile corresponding to your database setup and then make the adjustments for your environment. Here are some important settings to review:
 
 - `datasource.url`: This is the JDBC URL to your database server. If your database is not on the same machine as WebAPI, you'll want to make sure this is set. If you tested this in the previous section, make note of the settings that allowed for proper connection from your database query tool.
-- `datasource.username` and `datasource.password`: These are the application username and password respectively. If you followed the database setup guides, this will be the `ohdsi_app_user` account. 
+- `datasource.username` and `datasource.password`: These are the application username and password respectively. If you followed the database setup guides, this will be the `ohdsi_app_user` account.
 - `flyway.datasource.username` and `flyway.datasource.password`: These are the application administrator username and password respectively. This is the `ohdsi_admin_user` from the database setup guide.
 - `security.origin`: This is the name of the server where WebAPI is running. Note that `localhost` is not the server name but rather a standard network term that refers to the current machine. So, leaving this as `localhost` will allow WebAPI to work when accessing it from within the same computer however it will not be reachable from outside of the machine. You can also change this to `*` if you are comfortable with any machine connecting to WebAPI.
 - `server.port`: This is the default port where WebAPI will be accessed. The `security.origin` and `server.port` settings make up the basis for your root URL to WebAPI. In this case, it will be ``http://<security.origin>:<server.port>`` (i.e. http://localhost:8080).

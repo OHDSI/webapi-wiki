@@ -1,10 +1,10 @@
 # ATLAS Security
 
-The following sections discuss how WebAPI security is utilized in [ATLAS](https://github.com/OHDSI/Atlas). 
+The following sections discuss how WebAPI security is utilized in [ATLAS](https://github.com/OHDSI/Atlas).
 
 ## Configuring ATLAS
 
-Now that we have the OHDSI WebAPI configured, we can now setup ATLAS to expect a secure OHDSI WebAPI. 
+Now that we have the OHDSI WebAPI configured, we can now setup ATLAS to expect a secure OHDSI WebAPI.
 
 Placing a `config-local.js` file inside the root `atlas/js` file in your web installation will allow you to override the configuration settings without requiring changes to the Github repository or accidentally pushing your local information to Github.  The following code configures ATLAS to expect a secure OHDSI WebAPI installation and configures it to use our newly created demonstration database.
 
@@ -56,13 +56,13 @@ Now by logging out and logging back in to ATLAS you should be granted administra
 
 ## Manage Roles And Permissions
 
-Permissions are grouped into roles. Administrator can assign roles to a user. On the `Configuration` page you will find the `Manage Permissions` button. It opens `Roles` page. 
+Permissions are grouped into roles. Administrator can assign roles to a user. On the `Configuration` page you will find the `Manage Permissions` button. It opens `Roles` page.
 
 Note that `Manage Permissions` button is only available for members of the `admin` role.
 
 <img src="images/atlas/roles.png">
 
-You may click on certain role to edit it or press `New Role` button to create new role. 
+You may click on certain role to edit it or press `New Role` button to create new role.
 
 Now you're on `Role` page. Select users which are participated in the role on `Users` tab.
 
@@ -76,15 +76,14 @@ Note that users can’t create permissions - all necessary permissions are creat
 
 ## Access to User Interface Elements
 
-When user accesses some sections of ATLAS or press some buttons it results in calling WebAPI methods. Some of them are protected and user may not have appropriate permission. In this case error is generated. To prevent this ATLAS shows UI controls based on user’s permissions.
+When a user attempts to access some sections of ATLAS or interact with certain buttons, this generates a call to WebAPI methods. Given that some WebAPI methods are protected and the user may not have appropriate permission an error would be generated. To prevent this ATLAS limits access to UI controls based on a user’s permissions.
 
-If user tries to access protected section and he or she isn’t authenticated, the following screen will be shown
+If a user tries to access a protected section and without first being authenticated, the following screen will be shown
 
 <img src="images/atlas/notauthenticated.png">
 
-If user is authenticated but doesn’t have permissions required for the section, the following screen will be shown
+If a user is authenticated but doesn’t have the permissions required for the section, the following screen will be shown
 
 <img src="images/atlas/notauthorized.png">
 
-Also some UI controls (such as buttons, checkboxes, etc.) are disabled if user isn’t permitted for corresponding action. For example, if user isn’t permitted to create cohort, the “New Cohort” button is disabled.
-
+Also some UI controls (such as buttons, checkboxes, etc.) are disabled if the user isn’t permitted to perform the corresponding action. For example, if user isn’t permitted to create cohort, the “New Cohort” button will be disabled.

@@ -8,7 +8,7 @@ This guide assumes that you have installed WebAPI which will create the necessar
 
 ## Overview
 
-The WebAPI database created in the [WebAPI Installation Guide](WebAPI-Installation-Guide.md) allows you to configure one or more CDMs to use for performing various analyses through WebAPI. WebAPI's database contains two tables that hold this configuration: `source` and `source_daimon`. The JDBC connections to the CDM(s) are held in the `sources` table and defines the connection to the CDM database. This source entry is then related to the `source_daimons` table using the `source_id` and is used to configure the schemas where the CDM, vocabulary, results and temp schemas reside. These schemas support different daemon-type functionality for WebAPI functionality. In this guide, we'll cover how to establish the additional schemas in your CDM required by WebAPI and how to configure the required `source` and `source_daimon` entries required for WebAPI to function properly.
+The WebAPI database created in the [WebAPI Installation Guide](WebAPI-Installation-Guide.md) allows you to configure one or more CDMs to use for performing various analyses through WebAPI. WebAPI's database contains two tables that hold this configuration: `source` and `source_daimon`. The JDBC connections to the CDM(s) are held in the `source` table and defines the connection to the CDM database. This source entry is then related to the `source_daimons` table using the `source_id` and is used to configure the schemas where the CDM, vocabulary, results and temp schemas reside. These schemas support different daimon-type functionality for WebAPI functionality. In this guide, we'll cover how to establish the additional schemas in your CDM required by WebAPI and how to configure the required `source` and `source_daimon` entries required for WebAPI to function properly.
 
 ### Schemas
 
@@ -22,7 +22,7 @@ The following sections will describe how to prepare your CDM for use with the OH
 
 ⭐️ We would highly recommend that you run [Achilles](https://github.com/OHDSI/Achilles) to characterize your CDM data. As part of that process, you will establish a `Results schema` to hold the results. These tables are utilized by WebAPI to supplement the vocabulary search experience to include information about record counts based on CDMs configured in WebAPI. In the event that you have not done this, we'll cover how to set this up.
 
-Ask your database administrator to establish 2 new schemas in your CDM for the `Results schema` and the `temp schema`. We'll refer to these schemas as `results` and `temp` through the remainder of this guide. Also, you will need to establish a SQL account that is used by WebAPI to access the CDM and these various schemas. For this guide, we'll refer to this account as `webapi_sa`. 
+Ask your database administrator to establish 2 new schemas in your CDM for the `Results schema` and the `temp schema`. We'll refer to these schemas as `results` and `temp` through the remainder of this guide. Also, you will need to establish a SQL account that is used by WebAPI to access the CDM and these various schemas. For this guide, we'll refer to this account as `webapi_sa`.
 
 To start, `webapi_sa` account requires the following permissions on these schemas:
 
@@ -48,13 +48,13 @@ You will need to modify the URL above to point your instance of WebAPI running o
 - `<your_vocab_schema>`: The schema containing your vocabulary tables
 - `<your_results_schema>`: The schema containing your results tables
 - `<your_temp_schema>`: The schema that it utilized for your temporary schema
-- The `initConceptHierarchy` value in the URL is set to `true` and is used to establish the concept_hierarchy which is a cached version of the OMOP vocabulary specific to the concepts found in your CDM. This table can take a while to build and only needs to be established one time. This value can be set to `false` if you do not need to re-establish this table. 
+- The `initConceptHierarchy` value in the URL is set to `true` and is used to establish the concept_hierarchy which is a cached version of the OMOP vocabulary specific to the concepts found in your CDM. This table can take a while to build and only needs to be established one time. This value can be set to `false` if you do not need to re-establish this table.
 
 Once you have created the URL for your environment, open a browser and navigate to that URL. The resulting SQL will be displayed in the browser and your database administrator can use this script to establish the results schema.
 
 ## source and source_daimon table setup
 
-The WebAPI `source` and `source_daimon` tables were created when you started the tomcat service with the WebAPI war deployed.  These tables must be populated with a JDBC `source` connection and corresponding `source_daimons` that specify the location for the `cdm`, `vocabulary`, `results` and `temp` schemas associated to the source in order to use the OHDSI tools. For this example it is assumed that the CDM and Vocabulary exist as a separate schema in the same database instance.  
+The WebAPI `source` and `source_daimon` tables were created when you started the tomcat service with the WebAPI war deployed.  These tables must be populated with a JDBC `source` connection and corresponding `source_daimon` that specify the location for the `cdm`, `vocabulary`, `results` and `temp` schemas associated to the source in order to use the OHDSI tools. For this example it is assumed that the CDM and Vocabulary exist as a separate schema in the same database instance.  
 
 ### Example WebAPI SOURCE and SOURCE_DAIMON Inserts
 

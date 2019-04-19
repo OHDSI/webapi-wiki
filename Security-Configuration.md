@@ -1,6 +1,6 @@
 # WebAPI Security Configuration
 
-This guide will guide through the details required to configure the WebAPI security mechanisms. 
+This guide will guide through the details required to configure the WebAPI security mechanisms.
 
 ## Overview
 
@@ -8,7 +8,7 @@ Security in WebAPI involves [authentication and authorization](http://www.differ
 
 ## Authentication Configuration
 
-By default, security is disabled for WebAPI. This guide will provide an overview to enable security and go through the various options for securing the REST endpoints. This guide will assume you have read through the [[WebAPI Installation Guide]] and are familiar with modifying your `settings.xml` to configure the application.
+By default, security is disabled for WebAPI. This guide will provide an overview of how to enable security and go through the various options for securing the REST endpoints. This guide assumes you have read through the [[WebAPI Installation Guide]] and are familiar with modifying your `settings.xml` to configure the application.
 
 ### Enable Security & Secure Socket Layer (SSL)
 
@@ -23,14 +23,15 @@ The `<security>` settings are controlled via the settings.xml.  The relevant sec
 <security.cors.enabled>true</security.cors.enabled>
 ```
 
-- **security.provider**: The default is `DisabledSecurity`. To enable security in the applicaiton this value is set to `AtlasRegularSecurity`. 
+- **security.provider**: The default is `DisabledSecurity`. To enable security in the application this value is set to `AtlasRegularSecurity`.
 - **security.origin**: Use `*` to allow any client to connect to the REST endpoints. This setting is used to narrow the scope of clients that are able to connect to the REST endpoints. You may set this to a specific client application (i.e. `http://ohdsi.org/web/atlas`) and WebAPI will only accept connections originating from this domain.
 - **server.port**: This setting specifies the port to use to listen for client connections. The default is `8080` and this value is generally switched to `443` when using a secured connection.
 - **security.ssl.enabled**: Set to true to enable SSL for encrypting connections to the REST endpoints. Check the [[SSL Configuration In Tomcat]] guide for more information on how to set up a server to use SSL.
 - **server.ssl.key-store, server.ssl.key-store-password**: Specify the location of the `server.ssl.key-store` and `server.ssl.key-store-password` for use with the [[SSL Configuration In Tomcat]].
 - **security.cors.enabled**: Set to true to enable Cross-Origin Resource Sharing [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-- **security.duration.initial**: <TODO>
-- **security.duration.increment**: <TODO>
+- **security.maxLoginAttempts**: Maximum number of login attempts before a lockout period is initiated.
+- **security.duration.initial**: The `initial` length of lockout if there are more than `security.maxLoginAttempts` failed login attempts
+- **security.duration.increment**:  The `incremental` lockout time will be added to the total lockout time for each subsequent login attempt.
 
 Once `AtlasRegularSecurity` is enabled, you will be able to utilize the authentication mechanisms detailed below.
 
@@ -68,7 +69,7 @@ The following settings are used to control Active Directory settings:
 <security.ad.default.import.group>public</security.ad.default.import.group>
 ```
 
-- **security.ad.url**: The LDAP endpoint for AD 
+- **security.ad.url**: The LDAP endpoint for AD
 - **security.ad.searchBase**: The search base for AD
 - **security.ad.principalSuffix**: The user principal name suffix
 - **security.ad.system.username**: The username for accessing AD
@@ -146,7 +147,7 @@ The following settings are used to control Google IAP settings:
 
 ### Basic Security Configuration
 
-Please see the [[Basic Security Configuration]] guide for a set up that allows for a seperate credential data store.
+Please see the [[Basic Security Configuration]] guide for a set up that allows for a separate credential data store.
 
 ## Authorization
 
@@ -155,4 +156,3 @@ Authorization is handled based on the REST endpoint URL and HTTP method of the r
 ## ATLAS Role Based Security
 
 Authorized routes can be grouped into roles in the system and applied to users. See the [[Atlas Security]] section to see how this is facilitiated through a user interface in [ATLAS](https://github.com/OHDSI/Atlas).
-
