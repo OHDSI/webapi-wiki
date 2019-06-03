@@ -39,14 +39,14 @@ To start, `webapi_sa` account requires the following permissions on these schema
 Once the `Results schema` is established, you will need to generate the SQL script for your CDM dialect to establish the tables that WebAPI will require to run. To do this, WebAPI provides a URL that takes parameters via the query string to generate the proper database script for your setup:
 
 ```
-http://<server:port>/WebAPI/ddl/results?dialect=<your_cdm_database_dialect>&vocab=<your_vocab_schema>&results=<your_results_schema>&initConceptHierarchy=true&tempSchema=<your_temp_schema>
+http://<server:port>/WebAPI/ddl/results?dialect=<your_cdm_database_dialect>&schema=<your_results_schema>&vocabSchema=<your_vocab_schema>&tempSchema=<your_temp_schema>&initConceptHierarchy=true
 ```
 
 You will need to modify the URL above to point your instance of WebAPI running on `<server:port>` (default in this guide is `localhost:8080`) and then substitute the values specific to your CDM setup:
 
 - `<your_cdm_database_dialect>`: This is one of the following: `oracle`, `postgresql`, `pdw`, `redshift`, `impala`, `netezza`, `bigquery`, or `sql server` and is based on the platform you use to host your CDM.
-- `<your_vocab_schema>`: The schema containing your vocabulary tables
 - `<your_results_schema>`: The schema containing your results tables
+- `<your_vocab_schema>`: The schema containing your vocabulary tables
 - `<your_temp_schema>`: The schema that it utilized for your temporary schema
 - The `initConceptHierarchy` value in the URL is set to `true` and is used to establish the concept_hierarchy which is a cached version of the OMOP vocabulary specific to the concepts found in your CDM. This table can take a while to build and only needs to be established one time. This value can be set to `false` if you do not need to re-establish this table.
 
