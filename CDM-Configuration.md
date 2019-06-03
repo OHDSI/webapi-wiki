@@ -62,8 +62,8 @@ The WebAPI `source` and `source_daimon` tables were created when you started the
 INSERT INTO ohdsi.source (source_id, source_name, source_key, source_connection, source_dialect) VALUES (1, 'My Cdm', 'MY_CDM', ' jdbc:postgresql://server:5432/cdm?user={user}&password={password}', 'postgresql');
 
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (1,1,0, 'cdm', 0);
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (2,1,1, 'vocab', 0);
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (3,1,2, 'results', 0);
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (2,1,1, 'vocab', 1);
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (3,1,2, 'results', 1);
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (4,1,5, 'temp', 0);
 
 ```
@@ -71,6 +71,14 @@ INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, tabl
 The above inserts creates a source with `source_id = 1` with 4 daimon entries, one for each daimon type (0 = CDM, 1 = Vocabulary, 2 = Results, 5 = TEMP). If you'd like to configure more than 1 source for use in WebAPI, repeat the steps above and increment the `source_id` used to distinguish the sources from one another.
 
 👉 _Note: To see the new sources, open a browser and navigate to `<server>:port/WebAPI/sources/refresh`_
+
+## Daimon Priority
+
+The `source_daimion` table contains a column called `priority` which holds an integer value that is used by WebAPI depending on the context. 
+
+For vocabulary daimons (`daimon_type = 1`), you'll want to specify at least 1 daimon with a priority >= 1. The value with the highest priority will be used as the default vocabulary provider and you must specify at least 1 daimon with a priority >= 1 for ATLAS to function properly.
+
+For results daimons (`daimon_type = 2`), a priority >= 1 indicates to WebAPI to cache the Achilles record counts that are used when doing a vocabulary search. Upon start up, WebAPI will read in the `source_daimon` entries and for any results daimon with a priority >=1, it will attempt to load and cache the record counts into memory. For those daimons with a record count of 0, if/when their record counts are accessed, they will be cached after their initial load. Having the record counts loaded upon WebAPI's startup will help improve vocabulary search performance in ATLAS.
 
 ## Verify Configuration
 Once WebAPI is started, and the source/source_daimon inserts are complete, you should be able to open a browser to the following URL:
