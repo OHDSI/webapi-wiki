@@ -64,6 +64,7 @@ The following settings are used to control Active Directory settings:
 <security.ad.ignore.partial.result.exception>true</security.ad.ignore.partial.result.exception>
 <security.ad.result.count.limit>30000</security.ad.result.count.limit> <!-- 0 means no limit -->
 <security.ad.default.import.group>public</security.ad.default.import.group>
+	<security.ad.userMapping.usernameAttr>sAMAccountName</security.ad.userMapping.usernameAttr>
 ```
 
 - **security.ad.url**: The LDAP endpoint for AD
@@ -75,6 +76,7 @@ The following settings are used to control Active Directory settings:
 - **security.ad.ignore.partial.result.exception**: true/false
 - **security.ad.result.count.limit**: Limit the number of AD results to 0 means no limit
 - **security.ad.default.import.group**: The group to use for importing users from AD into WebAPI's configuration database.
+- **security.ad.userMapping.usernameAttr**: The name of field in AD where user login is stored
 
 ### OpenID configuration
 

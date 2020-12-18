@@ -143,7 +143,7 @@ Then follow these steps for each tabbed option:
 
 #### Tab: Properties ####
 
-- **Name**: ohdsi
+- **Name**: OHDSI
 - **Owner**: ohdsi_admin
 - **Comment**: OHDSI WebAPI database
 
