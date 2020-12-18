@@ -82,6 +82,10 @@ The following settings are used to control Active Directory settings:
 
 Some additional details around Active Directory configuration can be found in this [WebAPI GitHub Issue (#1373)](https://github.com/OHDSI/WebAPI/issues/1373).
 
+### Kerberos
+
+Please see the setup notes included in the [WebAPI Repository](https://github.com/OHDSI/WebAPI/tree/master/src/main/java/org/ohdsi/webapi/shiro/realms).
+
 ### OpenID configuration
 
 The following settings are used to control OpenID settings:
