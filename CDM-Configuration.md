@@ -8,7 +8,7 @@ This guide assumes that you have installed WebAPI which will create the necessar
 
 ## Overview
 
-The WebAPI database created in the [WebAPI Installation Guide](WebAPI-Installation-Guide.md) allows you to configure one or more CDMs to use for performing various analyses through WebAPI. WebAPI's database contains two tables that hold this configuration: `source` and `source_daimon`. The JDBC connections to the CDM(s) are held in the `source` table and defines the connection to the CDM database. This source entry is then related to the `source_daimons` table using the `source_id` and is used to configure the schemas where the CDM, vocabulary, results and temp schemas reside. These schemas support different daimon-type functionality for WebAPI functionality. In this guide, we'll cover how to establish the additional schemas in your CDM required by WebAPI and how to configure the required `source` and `source_daimon` entries required for WebAPI to function properly.
+The WebAPI database created in the [WebAPI Installation Guide](https://github.com/OHDSI/WebAPI/wiki/WebAPI-Installation-Guide) allows you to configure one or more CDMs to use for performing various analyses through WebAPI. WebAPI's database contains two tables that hold this configuration: `source` and `source_daimon`. The JDBC connections to the CDM(s) are held in the `source` table and defines the connection to the CDM database. This source entry is then related to the `source_daimons` table using the `source_id` and is used to configure the schemas where the CDM, vocabulary, results and temp schemas reside. These schemas support different daimon-type functionality for WebAPI functionality. In this guide, we'll cover how to establish the additional schemas in your CDM required by WebAPI and how to configure the required `source` and `source_daimon` entries required for WebAPI to function properly.
 
 ### Schemas
 
@@ -56,21 +56,44 @@ Once you have created the URL for your environment, open a browser and navigate 
 
 The WebAPI `source` and `source_daimon` tables were created when you started the tomcat service with the WebAPI war deployed.  These tables must be populated with a JDBC `source` connection and corresponding `source_daimon` that specify the location for the `cdm`, `vocabulary`, `results` and `temp` schemas associated to the source in order to use the OHDSI tools. For this example it is assumed that the CDM and Vocabulary exist as a separate schema in the same database instance.  
 
+Please note the following: 
+- The `source_id` must be > 0 and that the SQL below uses sequences to use the next available `source_id` and `source_daimon_id` respectively.
+- If you are configuring a PostgreSQL connection and are facing difficulities connecting, it may require the addition of the `OpenSourceSubProtocolOverride` to your `source_connection` connection string as described in [WebAPI Issue #592](https://github.com/OHDSI/WebAPI/issues/592).
+
 ### Example WebAPI SOURCE and SOURCE_DAIMON Inserts
 
 ```sql
-INSERT INTO ohdsi.source (source_id, source_name, source_key, source_connection, source_dialect) VALUES (1, 'My Cdm', 'MY_CDM', ' jdbc:postgresql://server:5432/cdm?user={user}&password={password}', 'postgresql');
+INSERT INTO webapi.source (source_id, source_name, source_key, source_connection, source_dialect) 
+SELECT nextval('webapi.source_sequence'), 'My Cdm', 'MY_CDM', ' jdbc:postgresql://server:5432/cdm?user={user}&password={password}', 'postgresql';
 
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (1,1,0, 'cdm', 0);
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (2,1,1, 'vocab', 1);
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (3,1,2, 'results', 1);
-INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) VALUES (4,1,5, 'temp', 0);
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
+SELECT nextval('webapi.source_sequence'), source_id, 0, 'cdm', 0
+FROM webapi.source
+WHERE source_key = 'MY_CDM'
+;
 
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
+SELECT nextval('webapi.source_sequence'), source_id, 1, 'vocab', 1
+FROM webapi.source
+WHERE source_key = 'MY_CDM'
+;
+
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
+SELECT nextval('webapi.source_sequence'), source_id, 2, 'results', 1
+FROM webapi.source
+WHERE source_key = 'MY_CDM'
+;
+
+INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
+SELECT nextval('webapi.source_sequence'), source_id, 5, 'temp', 0
+FROM webapi.source
+WHERE source_key = 'MY_CDM'
+;
 ```
 
 The above inserts creates a source with `source_id = 1` with 4 daimon entries, one for each daimon type (0 = CDM, 1 = Vocabulary, 2 = Results, 5 = TEMP). If you'd like to configure more than 1 source for use in WebAPI, repeat the steps above and increment the `source_id` used to distinguish the sources from one another.
 
-👉 _Note: To see the new sources, open a browser and navigate to `<server>:port/WebAPI/sources/refresh`_
+👉 _Note: To see the new sources, open a browser and navigate to `<server>:port/WebAPI/source/refresh`_
 
 ## Daimon Priority
 

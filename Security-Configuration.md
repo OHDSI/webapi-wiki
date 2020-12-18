@@ -17,6 +17,7 @@ The `<security>` settings are controlled via the settings.xml.  The relevant sec
 
 ```
 <security.provider>AtlasRegularSecurity</security.provider>
+<security.token.expiration>43200</security.token.expiration>
 <security.origin>*</security.origin>
 <server.port>8080</server.port>
 <security.ssl.enabled>true</security.ssl.enabled>
@@ -24,6 +25,7 @@ The `<security>` settings are controlled via the settings.xml.  The relevant sec
 ```
 
 - **security.provider**: The default is `DisabledSecurity`. To enable security in the application this value is set to `AtlasRegularSecurity`.
+- **security.token.expiration**: The expiration for the security bearer token.
 - **security.origin**: Use `*` to allow any client to connect to the REST endpoints. This setting is used to narrow the scope of clients that are able to connect to the REST endpoints. You may set this to a specific client application (i.e. `http://ohdsi.org/web/atlas`) and WebAPI will only accept connections originating from this domain.
 - **server.port**: This setting specifies the port to use to listen for client connections. The default is `8080` and this value is generally switched to `443` when using a secured connection.
 - **security.ssl.enabled**: Set to true to enable SSL for encrypting connections to the REST endpoints. Check the [[SSL Configuration In Tomcat]] guide for more information on how to set up a server to use SSL.
@@ -64,6 +66,7 @@ The following settings are used to control Active Directory settings:
 <security.ad.ignore.partial.result.exception>true</security.ad.ignore.partial.result.exception>
 <security.ad.result.count.limit>30000</security.ad.result.count.limit> <!-- 0 means no limit -->
 <security.ad.default.import.group>public</security.ad.default.import.group>
+	<security.ad.userMapping.usernameAttr>sAMAccountName</security.ad.userMapping.usernameAttr>
 ```
 
 - **security.ad.url**: The LDAP endpoint for AD
@@ -75,6 +78,13 @@ The following settings are used to control Active Directory settings:
 - **security.ad.ignore.partial.result.exception**: true/false
 - **security.ad.result.count.limit**: Limit the number of AD results to 0 means no limit
 - **security.ad.default.import.group**: The group to use for importing users from AD into WebAPI's configuration database.
+- **security.ad.userMapping.usernameAttr**: The name of field in AD where user login is stored
+
+Some additional details around Active Directory configuration can be found in this [WebAPI GitHub Issue (#1373)](https://github.com/OHDSI/WebAPI/issues/1373).
+
+### Kerberos
+
+Please see the setup notes included in the [WebAPI Repository](https://github.com/OHDSI/WebAPI/tree/master/src/main/java/org/ohdsi/webapi/shiro/realms).
 
 ### OpenID configuration
 

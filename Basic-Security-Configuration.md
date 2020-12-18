@@ -12,6 +12,7 @@ The settings.xml file is used to configure your build of the OHDSI WebAPI in you
 ```xml
 <security.provider>AtlasRegularSecurity</security.provider>
 <security.origin>*</security.origin>
+<security.ssl.enabled>true</security.ssl.enabled>
 <security.maxLoginAttempts>3</security.maxLoginAttempts>
 <security.duration.initial>10</security.duration.initial>
 <security.duration.increment>10</security.duration.increment>
@@ -20,7 +21,7 @@ The settings.xml file is used to configure your build of the OHDSI WebAPI in you
 <security.db.datasource.schema>ohdsi</security.db.datasource.schema>
 <security.db.datasource.username>ohdsi</security.db.datasource.username>
 <security.db.datasource.password>ohdsi</security.db.datasource.password>
-<security.db.datasource.authenticationQuery>select password from ${security.db.datasource.schema}.demo_security where email = ?</security.db.datasource.authenticationQuery>
+<security.db.datasource.authenticationQuery>select password,firstName,middleName,lastName from atlas_security.demo_security where email = ?</security.db.datasource.authenticationQuery>
 ```
 
 ## security.maxLoginAttempts
@@ -32,25 +33,28 @@ This is the maximum number of login attempts allowed before the account is locke
 This represents the `initial` length of lockout and the `incremental` length of lockout in seconds. So, if there are more than `security.maxLoginAttempts`, the initial lockout time will start and for every subsequent failed login, the incremental value will be added to the total lockout time.
 
 ## database 
-Once you have completed the configuration of the profile for your OHDSI WebAPI you will need to create the table that will contain our sample login information.  The script to create a minimal sample table in a postgresql environment is as follows:
+Once you have completed the configuration of the profile for your OHDSI WebAPI you will need to create the database, schema and table that will contain our sample login information.  To start, create database (eg. `Security`), and a schema within it as `atlas_security`. 
+
+The script to create a minimal sample table in a postgresql environment is as follows:
 
 ```sql
--- Table: ohdsi.demo_security
-
--- DROP TABLE ohdsi.demo_security;
-
-CREATE TABLE ohdsi.demo_security
+CREATE TABLE atlas_security.demo_security
 (
-    email character varying(255) COLLATE pg_catalog."default",
-    password character varying(255) COLLATE pg_catalog."default"
+    username character varying(255) COLLATE pg_catalog."default",
+    password character varying(255) COLLATE pg_catalog."default",
+    firstname character varying(255) COLLATE pg_catalog."default",
+    middlename character varying(255) COLLATE pg_catalog."default",
+    lastname character varying(255) COLLATE pg_catalog."default"
 )
 WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
 
-ALTER TABLE ohdsi.demo_security
-    OWNER to ohdsi;
+ALTER TABLE atlas_security.demo_security
+OWNER to ohdsi_app_user;
+
+GRANT ALL ON TABLE atlas_security.demo_security TO ohdsi_app_user WITH GRANT OPTION;
 ```
 
 Next you will need to insert a sample record that will contain our demonstration username and password.  The password is encrypted using BCrypt.  You can create your own username and password or use the sample insert statement provided below where we have already encrypted the password 'ohdsi' for the user named 'ohdsi'.  To create a different password hash using BCrypt you can use the following web site:
@@ -63,6 +67,8 @@ And then put that password hash into the statement below.
 insert into ohdsi.demo_security (email,password) 
 values ('ohdsi', '$2a$04$Fg8TEiD2u/xnDzaUQFyiP.uoDu4Do/tsYkTUCWNV0zTCW3HgnbJjO')
 ```
+
+If you are still facing issues after following the steps in this guide, please refer to this [WebAPI Issue #1341](https://github.com/OHDSI/WebAPI/issues/1341), [WebAPI Issue #1099](https://github.com/OHDSI/WebAPI/issues/1099) or post an issue to the [WebAPI Issue Tracker](https://github.com/OHDSI/WebAPI/issues). 
 
 ## Configuring ATLAS
 
