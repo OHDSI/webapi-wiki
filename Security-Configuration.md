@@ -80,6 +80,8 @@ The following settings are used to control Active Directory settings:
 - **security.ad.default.import.group**: The group to use for importing users from AD into WebAPI's configuration database.
 - **security.ad.userMapping.usernameAttr**: The name of field in AD where user login is stored
 
+Some additional details around Active Directory configuration can be found in this [WebAPI GitHub Issue (#1373)](https://github.com/OHDSI/WebAPI/issues/1373).
+
 ### OpenID configuration
 
 The following settings are used to control OpenID settings:
