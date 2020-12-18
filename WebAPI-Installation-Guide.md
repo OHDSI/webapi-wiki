@@ -75,10 +75,10 @@ C:\Git\OHDSI> git clone https://github.com/OHDSI/WebAPI.git
 Once we've downloaded the code, we want to ensure that we are using a released version of WebAPI. This is done by performing a `git checkout` of the code at a specific tagged version. You can find the latest released version of WebAPI at https://github.com/OHDSI/WebAPI/releases and note the tag as shown in the left hand menu. For example, if I want to check out v2.7.4 I would change to the WebAPI directory and use the following command:
 
 ```
-C:\Git\OHDSI\WebAPI> git checkout refs/tags/v2.7.4
+C:\Git\OHDSI\WebAPI> git checkout refs/tags/v2.8.0
 ```
 
-Where `v2.7.4` is the released version you would like to use.
+Where `v2.8.0` is the released version you would like to use.
 
 ### Create settings.xml file
 In the root of the WebAPI project folder, there is a file named `sample_settings.xml` which 3 `<profile>` blocks for the 3 WebAPI database platforms. Copy this file into a new folder `WebAPIConfig` and rename it to `settings.xml`. **Note**: `WebAPIConfig` will be subfolder off of the root `WebAPI` folder.
