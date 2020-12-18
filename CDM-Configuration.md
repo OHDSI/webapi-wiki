@@ -56,7 +56,9 @@ Once you have created the URL for your environment, open a browser and navigate 
 
 The WebAPI `source` and `source_daimon` tables were created when you started the tomcat service with the WebAPI war deployed.  These tables must be populated with a JDBC `source` connection and corresponding `source_daimon` that specify the location for the `cdm`, `vocabulary`, `results` and `temp` schemas associated to the source in order to use the OHDSI tools. For this example it is assumed that the CDM and Vocabulary exist as a separate schema in the same database instance.  
 
-Please note that the `source_id` must be > 0 and that the SQL below uses sequences to use the next available `source_id` and `source_daimon_id` respectively.
+Please note the following: 
+- The `source_id` must be > 0 and that the SQL below uses sequences to use the next available `source_id` and `source_daimon_id` respectively.
+- If you are configuring a PostgreSQL connection and are facing difficulities connecting, it may require the addition of the `OpenSourceSubProtocolOverride` to your `source_connection` connection string as described in [WebAPI Issue #592](https://github.com/OHDSI/WebAPI/issues/592).
 
 ### Example WebAPI SOURCE and SOURCE_DAIMON Inserts
 
