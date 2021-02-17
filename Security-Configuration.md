@@ -66,7 +66,12 @@ The following settings are used to control Active Directory settings:
 <security.ad.ignore.partial.result.exception>true</security.ad.ignore.partial.result.exception>
 <security.ad.result.count.limit>30000</security.ad.result.count.limit> <!-- 0 means no limit -->
 <security.ad.default.import.group>public</security.ad.default.import.group>
-	<security.ad.userMapping.usernameAttr>sAMAccountName</security.ad.userMapping.usernameAttr>
+<security.ad.searchString>(&amp;(objectClass=person)(userPrincipalName=%s))</security.ad.searchString>
+<security.ad.userMapping.displaynameAttr>displayname</security.ad.userMapping.displaynameAttr>
+<security.ad.userMapping.firstnameAttr>givenname</security.ad.userMapping.firstnameAttr>
+<security.ad.userMapping.middlenameAttr>initials</security.ad.userMapping.middlenameAttr>
+<security.ad.userMapping.lastnameAttr>sn</security.ad.userMapping.lastnameAttr>
+<security.ad.userMapping.usernameAttr>cn</security.ad.userMapping.usernameAttr>
 ```
 
 - **security.ad.url**: The LDAP endpoint for AD
@@ -74,10 +79,14 @@ The following settings are used to control Active Directory settings:
 - **security.ad.principalSuffix**: The user principal name suffix
 - **security.ad.system.username**: The username for accessing AD
 - **security.ad.system.password**: The password for `username` above.
-- **security.ad.searchFilter**: Use to configure a search filter
+- **security.ad.searchFilter**: Use to configure a search filter. If you have more than 5000 groups in your searchBase, use this parameter to specify the groups you wish to limit the search to (e.g. using OR notation like (|(CN=atlas-admin, …)(CN=atlas-user, …)) )
 - **security.ad.ignore.partial.result.exception**: true/false
 - **security.ad.result.count.limit**: Limit the number of AD results to 0 means no limit
 - **security.ad.default.import.group**: The group to use for importing users from AD into WebAPI's configuration database.
+- **security.ad.userMapping.displaynameAttr**: The name of the field in AD where the user friendly, display name is stored.
+- **security.ad.userMapping.firstnameAttr**: The name of the field in AD where the user's first name is stored.
+- **security.ad.userMapping.middlenameAttr**: The name of the field in AD where the user's middle name is stored.
+- **security.ad.userMapping.lastnameAttr**: The name of the field in AD where the user's last name is stored.
 - **security.ad.userMapping.usernameAttr**: The name of field in AD where user login is stored
 
 Some additional details around Active Directory configuration can be found in this [WebAPI GitHub Issue (#1373)](https://github.com/OHDSI/WebAPI/issues/1373).
