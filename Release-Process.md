@@ -26,7 +26,7 @@ Once the RC branch is created, final testing can commence, and any issues found 
 The branch structure may look like this:
 
 ````
-master-1.0 ->          O - (1.0.1) - O - O - (1.0.2)
+master-1.0 ->      O - (1.0.1) - O - O - (1.0.2)
                   /
 master ->  O - (1.0) - O - O 
                             \   
@@ -38,7 +38,7 @@ master ->  O - (1.0) - O - O
 With the final commit for release added to the RC branch completed, the software is ready for release.  Finalize the contents of the release notes in Github, and publish the release. This will apply the tag to the head of the RC branch:
 
 ````
-master-1.0 ->          O - (1.0.1) - O - O - (1.0.2)
+master-1.0 ->      O - (1.0.1) - O - O - (1.0.2)
                   /
 master ->  O - (1.0) - O - O        
                             \       
@@ -50,7 +50,7 @@ master ->  O - (1.0) - O - O
 With the release formally published, the RC branch can be merged into master, and the versions can be updated to reflect the next development cycle:
 
 ````
-master-1.0 ->          O - (1.0.1) - O - O - (1.0.2)
+master-1.0 ->      O - (1.0.1) - O - O - (1.0.2)
                   /
 master ->  O - (1.0) - O - O         O - O {1.2.0-SNAPSHOT}
                             \       /
@@ -60,7 +60,7 @@ master ->  O - (1.0) - O - O         O - O {1.2.0-SNAPSHOT}
 Once the new version is set in `master` a new hotfix branch is created to support the hotfixes for that minor version release:
 
 ````
-master-1.0 ->          O - (1.0.1) - O - O - (1.0.2)
+master-1.0 ->      O - (1.0.1) - O - O - (1.0.2)
                   /
 master ->  O - (1.0) - O - O         O - O {1.2.0-SNAPSHOT}
                             \       /
