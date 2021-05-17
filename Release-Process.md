@@ -1,6 +1,6 @@
-#### Release Process
+# Release Process
 
-#### Overview
+### Overview
 
 This article describes the sequence of steps and methodology of preparing annd executing the release process.  The management of individual feature branches is beyond the scope of this topic.  The release process begins once all features for a given version of the sofware has been wrapped up and the codebase is frozen for new features until after the release is complete.
 
@@ -30,7 +30,7 @@ hotfix ->          O - (1.0.1) - O - O - (1.0.2)
                   /
 master ->  O - (1.0) - O - O 
                             \   
-      release candidate:     O {remoeve -snapshot / update version label}
+      release candidate:     O - O {remove -snapshot / update version label}
 ````
 
 ### Publishing the release
