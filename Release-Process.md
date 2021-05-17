@@ -69,7 +69,7 @@ master ->  O - (1.0) - O - O         O - O {1.2.0-SNAPSHOT}
 master-1.1 ->                        O
 ````
 
-Note: if the prior hotfix is no longer necessary (ie: we no longer post hotfixes to 1.0, and new hotfixes will be relaseed under 1.1.x), the previous master-{version} can be deleted.
+Note: if the prior hotfix is no longer necessary (ie: we no longer post hotfixes to 1.0, and new hotfixes will be released under 1.1.x), the previous master-{version} can be deleted.
 
 
 ### Updating Public Websites with Latest Release
