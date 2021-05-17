@@ -2,6 +2,7 @@
 * [[WebAPI Installation Guide]]
   * [[Security Configuration]]
   * [[CDM Configuration]]
+* [[Release Process]]
 
 **Project Management**
 * [[Roadmap]]
