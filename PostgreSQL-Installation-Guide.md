@@ -107,6 +107,8 @@ COMMENT ON ROLE ohdsi_admin_user
   IS 'Admin user account for OHDSI applications';
 ```
 
+**Note** the password is hashed using md5 with format `{password}{user}` i.e. for the above example md5("admin1ohdsi_admin_user") == "8d34c863380040dd6e1795bd088ff4a9".
+
 ### Login: ohdsi_app_user ###
 
 #### Tab: Properties ####
