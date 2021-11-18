@@ -71,7 +71,7 @@ The ohdsi_app role is not a member of any other parent group, so leave member em
 CREATE ROLE ohdsi_app
    VALID UNTIL 'infinity';
 COMMENT ON ROLE ohdsi_app
-  IS 'Application groupfor OHDSI applications';
+  IS 'Application group for OHDSI applications';
 ```
 
 ### Creating Database Login Roles ###
