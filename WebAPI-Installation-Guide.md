@@ -3,7 +3,7 @@
 # Overview
 This page describes the database setup, maven build configuration and deployment of OHDSI/WebAPI to a Apache Tomcat environment. This application is Java-based, packaged as a WAR, and should be able to be deployed into any Java servlet container.
 
-This guide is intended to provide a basic setup guide on a Windows operating system. **This guide is not intended for setting up production systems**. There are other efforts in the OHDSI Community that are focused on providing more enterprise-ready setups for the OHDSI Tools. These include the Broadsea project: https://github.com/OHDSI/Broadsea and OHDSI on AWS: https://github.com/OHDSI/OHDSIonAWS.
+This guide is intended to provide a basic setup guide on a Windows operating system. There are other efforts in the OHDSI Community that are focused on providing more enterprise-ready setups for the OHDSI Tools. These include the Broadsea project: https://github.com/OHDSI/Broadsea and OHDSI on AWS: https://github.com/OHDSI/OHDSIonAWS.
 
 # Software
 
@@ -29,24 +29,17 @@ set JAVA_HOME=C:/Program Files/Java/jdk1.8.0_201
 
 - **Database Query Tool**: Use your favorite database query tool (such as [SQL Workbench/J](https://www.sql-workbench.eu/)). This will be used to verify the database setup.
 
-- **Database platform for WebAPI Database**: WebAPI requires a database on any one of these platforms:
-    - MS SQL 2012
-    - PostrgeSQL 10
-    - Oracle 11gXE
+- **PostgreSQL**: WebAPI requires a PostgreSQL database. 🙌 **NOTE**: WebAPI dropped support for SQL Server/Oracle with the 2.8 release ([2.8 release notes](https://github.com/OHDSI/WebAPI/releases/tag/v2.8.0)).
 
 ⭐️ **Important:** This database platform is for hosting the **WebAPI Configuration Database** not your patient-level data converted to the Common Data Model.
-
-🙌 **_Please Note_**: We'd strongly encourage you to use **PostgreSQL** as we do **plan to stop utilizing** SQL Server and Oracle in **WebAPI 3.0** and forward.
 
 # Database Preparation
 
 If you already have a database server you plan to use, please refer to the install guides as they contain information on how to set up the database required by WebAPI.
 
 ## Install And Configure the Database Platform
-Follow the setup guide for your database platform:
+
 - [PostgreSQL 10](https://github.com/OHDSI/WebAPI/wiki/PostgreSQL-Installation-Guide)
-- [SQL Server 2012](https://github.com/OHDSI/WebAPI/wiki/SQL-Server-Setup-Guide)
-- [Oracle 11g XE](https://github.com/OHDSI/WebAPI/wiki/Oracle-DB-Setup-Guide)
 
 ✅ Note the **database name, user names and passwords** created as part of this process as they are required for the WebAPI setup.
 
@@ -72,22 +65,26 @@ C:\Git\OHDSI> git clone https://github.com/OHDSI/WebAPI.git
 
 ### Check out a released version of the software
 
-Once we've downloaded the code, we want to ensure that we are using a released version of WebAPI. This is done by performing a `git checkout` of the code at a specific tagged version. You can find the latest released version of WebAPI at https://github.com/OHDSI/WebAPI/releases and note the tag as shown in the left hand menu. For example, if I want to check out v2.7.4 I would change to the WebAPI directory and use the following command:
+Once we've downloaded the code, we want to ensure that we are using a released version of WebAPI. This is done by performing a `git checkout` of the code at a specific tagged version. You can find the latest released version of WebAPI at https://github.com/OHDSI/WebAPI/releases and note the tag as shown in the left hand menu. For example, if I want to check out v2.14.0 I would change to the WebAPI directory and use the following command:
 
 ```
-C:\Git\OHDSI\WebAPI> git checkout refs/tags/v2.8.0
+C:\Git\OHDSI\WebAPI> git checkout refs/tags/v2.14.0
 ```
 
-Where `v2.8.0` is the released version you would like to use.
+Where `v2.14.0` is the released version you would like to use.
 
 ### Create settings.xml file
-In the root of the WebAPI project folder, there is a file named `sample_settings.xml` which 3 `<profile>` blocks for the 3 WebAPI database platforms. Copy this file into a new folder `WebAPIConfig` and rename it to `settings.xml`. **Note**: `WebAPIConfig` will be subfolder off of the root `WebAPI` folder.
+In the root of the WebAPI project folder, there is a file named `sample_settings.xml`. Copy this file into a new folder `WebAPIConfig` and rename it to `settings.xml`. **Note**: `WebAPIConfig` will be subfolder off of the root `WebAPI` folder.
 
 ## Configure & Build WebAPI
 
 ### Configure the Maven profile
 
-Next we need to configure the maven profile in `WebAPIConfig\settings.xml` to match the your environment setup. Open the `settings.xml`, find the profile corresponding to your database setup and then make the adjustments for your environment. Here are some important settings to review:
+Next we need to configure the maven profile in `WebAPIConfig\settings.xml` to match the your environment setup. Open the `settings.xml`, find the profile corresponding to your database setup and then make the adjustments for your environment.
+ 🙌 **NOTE**: WebAPI dropped support for SQL Server/Oracle with the 2.8.  So the only valid profile is `webapi-postgresql`.
+
+
+ Here are some important settings to review:
 
 - `datasource.url`: This is the JDBC URL to your database server. If your database is not on the same machine as WebAPI, you'll want to make sure this is set. If you tested this in the previous section, make note of the settings that allowed for proper connection from your database query tool.
 - `datasource.username` and `datasource.password`: These are the application username and password respectively. If you followed the database setup guides, this will be the `ohdsi_app_user` account.
@@ -97,24 +94,15 @@ Next we need to configure the maven profile in `WebAPIConfig\settings.xml` to ma
 
 By default, WebAPI does **not** require authentication and authorization. The [Basic Security Configuration Guide](Basic-Security-Configuration.md) covers this in more detail if you'd like to use security.
 
-### Oracle Specific Configuration
-
-**NOTE: This is only necessary if you host your WebAPI database on Oracle**
-You will need to download the Oracle JDBC driver, and install it into your local maven repository.  Once you download the jar, you will need to execute the following maven command to install it into the local repository.  The simplest way is to navigate via the CLI to the directory the JAR was downloaded to, and execute the following command:
-```
-mvn install:install-file -Dfile=ojdbc.jar -DgroupId=ojdbc -DartifactId=ojdbc -Dversion=6.0.0 -Dpackaging=jar
-```
-(The above is all a single line command.)
-
-
 ### Building the WebAPI .war file using Maven
 
 From the root of the WebAPI Project folder (`C:\Git\OHDSI\WebAPI`) run the following maven command to create the .war file which will be used to deploy and run WebAPI:
 
 ```
-C:\Git\OHDSI\WebAPI> mvn clean package -DskipTests -s WebAPIConfig/settings.xml -P {profile id}
+C:\Git\OHDSI\WebAPI> mvn clean package -DskipUnitTests -DskipITtests -s WebAPIConfig/settings.xml -P {profile id}
 ```
-👉 **Note: {profile id}** is set to the value of the profile ID from the example configuration as described in the *Clone the WebAPI project* section.  The valid values for this are `webapi-postgresql`, `webapi-mssql` or `webapi-oracle`.  
+👉 **Note: {profile id}** is set to the value of the profile ID from the example configuration as described in the *Clone the WebAPI project* section.  The valid values for this are `webapi-postgresql`, `webapi-mssql` or `webapi-oracle`.
+ 🙌 **NOTE**: WebAPI dropped support for SQL Server/Oracle with the 2.8.  So the only valid profile is `webapi-postgresql`.
 
 This will create the file `WebAPI.war` in the `target` WebAPI subfolder (`C:\Git\OHDSI\WebAPI\target\WebAPI.war`). Note this location in order to deploy this .war to the Tomcat container which will then provide you a container to run the Java application and provide you with the service to allow communications via HTTP.
 
@@ -212,15 +200,15 @@ Reading the Tomcat logs, the following output should appear indicating that the 
 2016-02-24 11:01:14.482 INFO org.ohdsi.webapi.WebApi.main() org.flywaydb.core.internal.command.DbMigrate -  - Successfully applied 21 migrations to schema "OHDSI" (execution time 00:06.124s).
 ```
 
-Other platforms should see similar output, except for the JDBC url in the connection.  Use your DB platform's query tool to verify tables now exist in the schema.
+Use your DB platform's query tool to verify tables now exist in the schema.
 
 If all worked, you can verify that WebAPI is working by navigating to http://localhost:8080/WebAPI/info and you should see the following output:
 
 ```
-{"version":"2.7.0"}
+{"version":"2.14.0"}
 ```
 
-This output indicates that WebAPI version 2.7.0 is now running. Next, you will need to establish a connection between WebAPI and your CDM v5 database(s) which is covered in the [CDM Configuration](CDM-Configuration) section.
+This output indicates that WebAPI version 2.14.0 is now running. Next, you will need to establish a connection between WebAPI and your CDM v5 database(s) which is covered in the [CDM Configuration](CDM-Configuration) section.
 
 
 # Troubleshooting

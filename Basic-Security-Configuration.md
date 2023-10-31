@@ -59,7 +59,7 @@ GRANT ALL ON TABLE atlas_security.demo_security TO ohdsi_app_user WITH GRANT OPT
 
 Next you will need to insert a sample record that will contain our demonstration username and password.  The password is encrypted using BCrypt.  You can create your own username and password or use the sample insert statement provided below where we have already encrypted the password 'ohdsi' for the user named 'ohdsi'.  To create a different password hash using BCrypt you can use the following web site:
 
-https://www.dailycred.com/article/bcrypt-calculator
+https://www.bcryptcalculator.com/
 
 And then put that password hash into the statement below.
 

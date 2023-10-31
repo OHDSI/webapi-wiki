@@ -67,25 +67,25 @@ INSERT INTO webapi.source (source_id, source_name, source_key, source_connection
 SELECT nextval('webapi.source_sequence'), 'My Cdm', 'MY_CDM', ' jdbc:postgresql://server:5432/cdm?user={user}&password={password}', 'postgresql';
 
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
-SELECT nextval('webapi.source_sequence'), source_id, 0, 'cdm', 0
+SELECT nextval('webapi.source_daimon_sequence'), source_id, 0, 'cdm', 0
 FROM webapi.source
 WHERE source_key = 'MY_CDM'
 ;
 
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
-SELECT nextval('webapi.source_sequence'), source_id, 1, 'vocab', 1
+SELECT nextval('webapi.source_daimon_sequence'), source_id, 1, 'vocab', 1
 FROM webapi.source
 WHERE source_key = 'MY_CDM'
 ;
 
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
-SELECT nextval('webapi.source_sequence'), source_id, 2, 'results', 1
+SELECT nextval('webapi.source_daimon_sequence'), source_id, 2, 'results', 1
 FROM webapi.source
 WHERE source_key = 'MY_CDM'
 ;
 
 INSERT INTO webapi.source_daimon (source_daimon_id, source_id, daimon_type, table_qualifier, priority) 
-SELECT nextval('webapi.source_sequence'), source_id, 5, 'temp', 0
+SELECT nextval('webapi.source_daimon_sequence'), source_id, 5, 'temp', 0
 FROM webapi.source
 WHERE source_key = 'MY_CDM'
 ;
@@ -97,7 +97,7 @@ The above inserts creates a source with `source_id = 1` with 4 daimon entries, o
 
 ## Daimon Priority
 
-The `source_daimion` table contains a column called `priority` which holds an integer value that is used by WebAPI depending on the context. 
+The `source_daimon` table contains a column called `priority` which holds an integer value that is used by WebAPI depending on the context. 
 
 For vocabulary daimons (`daimon_type = 1`), you'll want to specify at least 1 daimon with a priority >= 1. The value with the highest priority will be used as the default vocabulary provider and you must specify at least 1 daimon with a priority >= 1 for ATLAS to function properly.
 
