@@ -21,7 +21,7 @@ The settings.xml file is used to configure your build of the OHDSI WebAPI in you
 <security.db.datasource.schema>ohdsi</security.db.datasource.schema>
 <security.db.datasource.username>ohdsi</security.db.datasource.username>
 <security.db.datasource.password>ohdsi</security.db.datasource.password>
-<security.db.datasource.authenticationQuery>select password,firstName,middleName,lastName from atlas_security.demo_security where email = ?</security.db.datasource.authenticationQuery>
+<security.db.datasource.authenticationQuery>select password,firstName,middleName,lastName from atlas_security.users where username = ?</security.db.datasource.authenticationQuery>
 ```
 
 ## security.maxLoginAttempts
@@ -38,7 +38,7 @@ Once you have completed the configuration of the profile for your OHDSI WebAPI y
 The script to create a minimal sample table in a postgresql environment is as follows:
 
 ```sql
-CREATE TABLE atlas_security.demo_security
+CREATE TABLE atlas_security.users
 (
     username character varying(255) COLLATE pg_catalog."default",
     password character varying(255) COLLATE pg_catalog."default",
@@ -51,10 +51,10 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE atlas_security.demo_security
+ALTER TABLE atlas_security.users
 OWNER to ohdsi_app_user;
 
-GRANT ALL ON TABLE atlas_security.demo_security TO ohdsi_app_user WITH GRANT OPTION;
+GRANT ALL ON TABLE atlas_security.users TO ohdsi_app_user WITH GRANT OPTION;
 ```
 
 Next you will need to insert a sample record that will contain our demonstration username and password.  The password is encrypted using BCrypt.  You can create your own username and password or use the sample insert statement provided below where we have already encrypted the password 'ohdsi' for the user named 'ohdsi'.  To create a different password hash using BCrypt you can use the following web site:
@@ -64,7 +64,7 @@ https://www.bcryptcalculator.com/
 And then put that password hash into the statement below.
 
 ```sql
-insert into ohdsi.demo_security (email,password) 
+insert into atlas_security.users (username,password) 
 values ('ohdsi', '$2a$04$Fg8TEiD2u/xnDzaUQFyiP.uoDu4Do/tsYkTUCWNV0zTCW3HgnbJjO')
 ```
 
